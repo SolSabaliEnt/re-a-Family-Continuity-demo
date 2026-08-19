@@ -1,0 +1,18 @@
+{
+  "name": "(re:) — The Family Continuity Platform",
+  "short_name": "(re:)",
+  "description": "Private family continuity infrastructure by SolSabali.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fcf8f3",
+  "theme_color": "#fcf8f3",
+  "icons": [
+    {
+      "src": "/re-continuity-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+name: Capture landing screens
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - app.html
+      - .github/workflows/capture-landing-screens.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --save-dev playwright
+          npx playwright install --with-deps chromium
+
+      - name: Serve site
+        run: |
+          python3 -m http.server 8080 >/tmp/re-server.log 2>&1 &
+          echo $! > /tmp/re-server.pid
+
+      - name: Capture real app screens
+        run: |
+          cat > /tmp/capture.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const browser = await chromium.launch({ headless: true });
+          const screens = ['family', 'gather', 'legacy'];
+          fs.mkdirSync('assets', { recursive: true });
+
+          for (const screen of screens) {
+            const page = await browser.newPage({
+              viewport: { width: 390, height: 844 },
+              deviceScaleFactor: 2,
+            });
+            await page.goto(
+              `http://127.0.0.1:8080/app.html?landing=1&screen=${screen}`,
+              { waitUntil: 'networkidle' }
+            );
+            await page.waitForTimeout(4500);
+            await page.screenshot({
+              path: `assets/landing-${screen}.png`,
+              fullPage: false,
+            });
+            await page.close();
+          }
+
+          await browser.close();
+          EOF
+          node /tmp/capture.mjs
+
+      - name: Commit static screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/landing-family.png assets/landing-gather.png assets/landing-legacy.png
+          if git diff --cached --quiet; then
+            echo "Screens unchanged"
+          else
+            git commit -m "Refresh static landing app screens"
+            git push
+          fi

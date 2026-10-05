@@ -2,55 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
-    <meta name="theme-color" content="#fcf8f3" />
-    <meta
-      name="description"
-      content="Private family continuity infrastructure by SolSabali."
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#F7F9FC" />
+    <meta name="description" content="Private family continuity infrastructure by SolSabali." />
     <meta name="author" content="SolSabali Enterprises LLC" />
-
     <link rel="icon" type="image/png" href="/re-continuity-icon.png" />
     <link rel="apple-touch-icon" href="/re-continuity-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="(re:)" />
-
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://continuity.ownmypurpose.io/" />
     <meta property="og:title" content="(re:) — The Family Continuity Platform" />
-    <meta
-      property="og:description"
-      content="Private family continuity infrastructure by SolSabali."
-    />
-    <meta
-      property="og:image"
-      content="https://continuity.ownmypurpose.io/social-share.png"
-    />
+    <meta property="og:description" content="Private family continuity infrastructure by SolSabali." />
+    <meta property="og:image" content="https://continuity.ownmypurpose.io/social-share.png" />
     <meta property="og:image:alt" content="(re:) by SolSabali" />
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="(re:) — The Family Continuity Platform" />
-    <meta
-      name="twitter:description"
-      content="Private family continuity infrastructure by SolSabali."
-    />
-    <meta
-      name="twitter:image"
-      content="https://continuity.ownmypurpose.io/social-share.png"
-    />
-
+    <meta name="twitter:description" content="Private family continuity infrastructure by SolSabali." />
+    <meta name="twitter:image" content="https://continuity.ownmypurpose.io/social-share.png" />
     <title>(re:) — The Family Continuity Platform</title>
     <script type="module" crossorigin src="/assets/index-6IV1nIT6.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/jsx-runtime-Cltr0gcK.js">
     <link rel="stylesheet" crossorigin href="/assets/index-GOojGGba.css">
   </head>
-
   <body>
     <div id="root"></div>
+    <script>
+      // Landing-page embeds should show the real signed-in family experience
+      // without introducing a separate mock UI. Normal /app.html behavior is unchanged.
+      if (new URLSearchParams(location.search).get("landing") === "1") {
+        let entered = false;
+        const enter = () => {
+          if (entered) return;
+          const button = [...document.querySelectorAll("button")].find(
+            (node) => node.textContent && node.textContent.trim() === "Sign In"
+          );
+          if (button) {
+            entered = true;
+            button.click();
+          }
+        };
+        const observer = new MutationObserver(enter);
+        observer.observe(document.documentElement, { subtree: true, childList: true });
+        enter();
+        setTimeout(() => observer.disconnect(), 12000);
+      }
+    </script>
   </body>
 </html>

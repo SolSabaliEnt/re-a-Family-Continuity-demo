@@ -67,5 +67,27 @@
         setTimeout(() => observer.disconnect(), 15000);
       }
     </script>
+  
+    <script>
+      // Canonical re:continuity branding for the deployed app shell.
+      (() => {
+        const canonical = "/re-continuity-icon.png?v=canonical";
+        const syncBrand = () => {
+          document.querySelectorAll("img").forEach((img) => {
+            const src = img.getAttribute("src") || "";
+            if (src.includes("solsabali-re-logo") || src.includes("solsabali-re-mark")) {
+              img.src = canonical;
+              img.alt = "re:continuity";
+              img.style.objectFit = "contain";
+              img.style.width = "52px";
+              img.style.height = "52px";
+            }
+          });
+        };
+        const observer = new MutationObserver(syncBrand);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        syncBrand();
+      })();
+    </script>
   </body>
 </html>

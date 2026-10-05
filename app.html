@@ -30,24 +30,41 @@
   <body>
     <div id="root"></div>
     <script>
-      // Landing-page embeds should show the real signed-in family experience
-      // without introducing a separate mock UI. Normal /app.html behavior is unchanged.
-      if (new URLSearchParams(location.search).get("landing") === "1") {
+      // Landing-page embeds render real app screens but remain presentation-only.
+      // Normal /app.html behavior is unchanged.
+      const params = new URLSearchParams(location.search);
+      if (params.get("landing") === "1") {
         let entered = false;
-        const enter = () => {
-          if (entered) return;
-          const button = [...document.querySelectorAll("button")].find(
-            (node) => node.textContent && node.textContent.trim() === "Sign In"
-          );
-          if (button) {
-            entered = true;
-            button.click();
+        let navigated = false;
+        const target = params.get("screen") || "home";
+        const labels = { family: "Family", gather: "Gather", legacy: "Legacy" };
+
+        const enterAndNavigate = () => {
+          if (!entered) {
+            const signIn = [...document.querySelectorAll("button")].find(
+              (node) => node.textContent && node.textContent.trim() === "Sign In"
+            );
+            if (signIn) {
+              entered = true;
+              signIn.click();
+            }
+          }
+          if (entered && !navigated && target !== "home") {
+            const label = labels[target];
+            const navButton = [...document.querySelectorAll("button")].find(
+              (node) => node.textContent && node.textContent.trim() === label
+            );
+            if (navButton) {
+              navigated = true;
+              navButton.click();
+            }
           }
         };
-        const observer = new MutationObserver(enter);
+
+        const observer = new MutationObserver(enterAndNavigate);
         observer.observe(document.documentElement, { subtree: true, childList: true });
-        enter();
-        setTimeout(() => observer.disconnect(), 12000);
+        enterAndNavigate();
+        setTimeout(() => observer.disconnect(), 15000);
       }
     </script>
   </body>

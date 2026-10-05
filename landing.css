@@ -81,3 +81,10 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,249,252,.92);backdro
 .cta-box h2{max-width:800px}
 @media(max-width:980px){.hero-grid-simple,.trust-simple{grid-template-columns:1fr}.hero-message-card{min-height:320px}.pain-three,.help-grid{grid-template-columns:1fr 1fr}.static-faces .screen-face.featured{transform:none}}
 @media(max-width:660px){.hero-simple{padding:64px 0 48px}.hero-simple h1{font-size:52px}.hero-message-card{min-height:280px;padding:28px}.hero-message-card strong{font-size:32px}.pain-three,.help-grid{grid-template-columns:1fr}.trust-simple{gap:24px}.trust-simple h2{font-size:48px}}
+
+/* re:continuity public brand cleanup */
+.mark{position:relative;font-size:0;color:transparent}
+.mark:before,.mark:after{content:"";position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.92)}
+.mark:before{width:19px;height:19px;left:8px;top:8px}
+.mark:after{width:10px;height:10px;right:7px;bottom:7px;border-color:var(--accent)}
+.hero-message-mark{font:400 28px/1 var(--display);letter-spacing:-.02em;color:var(--accent)}

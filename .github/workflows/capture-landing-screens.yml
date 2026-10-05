@@ -42,16 +42,19 @@ jobs:
           const screens = ['family', 'gather', 'legacy'];
           fs.mkdirSync('assets', { recursive: true });
 
+          const labels = { family: 'Family', gather: 'Gather', legacy: 'Legacy' };
           for (const screen of screens) {
             const page = await browser.newPage({
               viewport: { width: 390, height: 844 },
               deviceScaleFactor: 2,
             });
             await page.goto(
-              `http://127.0.0.1:8080/app.html?landing=1&screen=${screen}`,
+              'http://127.0.0.1:8080/app.html?landing=1',
               { waitUntil: 'networkidle' }
             );
             await page.waitForTimeout(4500);
+            await page.getByRole('button', { name: labels[screen], exact: true }).click();
+            await page.waitForTimeout(900);
             await page.screenshot({
               path: `assets/landing-${screen}.png`,
               fullPage: false,
